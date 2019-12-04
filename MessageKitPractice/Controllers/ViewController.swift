@@ -70,12 +70,41 @@ extension ViewController: InputBarAccessoryViewDelegate {
         messageList.append(newMessage)
         
         // 新しいメッセージを画面に表示
-        messagesCollectionView.insertSections([messageList.count - 1]) // 配列は0から始まるlから-1
+
+        messagesCollectionView.insertSections([messageList.count - 1]) // 配列は0から始まるから-1
+        
+        // 返信が遅れてくるように設定
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            // メソッドcreateResponseを使用
+            let responseMessage = self.createResponse(text: text)
+            self.messageList.append(responseMessage)
+            self.messagesCollectionView.insertSections([self.messageList.count - 1])
+        }
+        
+        
         
         // 送信後、メッセージ入力欄のメッセージを消す
         inputBar.inputTextView.text = ""
         
         
+        
+    }
+
+    // 送信されたメッセージに対して、返信するメソッド
+    // text: 送信された文字
+    func createResponse(text: String) -> Message {
+        // 返信用の送信者の作成
+        let user = ChatUser(senderId: "3989", displayName: "bot")
+        // 返信を作成
+        if text == "こんにちは" {
+            return Message(user: user, text: "Bonjour.", messageId: UUID().uuidString, sentDate: Date())
+        } else if text == "こんばんは" {
+            return Message(user: user, text: "Bonsoir.", messageId: UUID().uuidString, sentDate: Date())
+        } else if text == "ありがとう" {
+            return Message(user: user, text: "Merci.", messageId: UUID().uuidString, sentDate: Date())
+        } else {
+            return Message(user: user, text: "Je ne sais pas.", messageId: UUID().uuidString, sentDate: Date())
+        }
     }
 }
 
