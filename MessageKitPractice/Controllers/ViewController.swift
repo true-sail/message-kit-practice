@@ -108,7 +108,28 @@ extension ViewController: InputBarAccessoryViewDelegate {
     }
 }
 
+// メッセージのデザインを設定する
 extension ViewController: MessagesDisplayDelegate {
+    
+    func backgroundColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+        
+        if isFromCurrentSender(message: message) {
+            // このメッセージの送信者が自分の場合
+        return .red
+        } else {
+        return .blue
+        }
+    }
+    
+    func textColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+        if isFromCurrentSender(message: message) {
+            // このメッセージの送信者が自分の場合
+            return .black
+        } else {
+            return .white
+        }
+        
+    }
     
 
 }
